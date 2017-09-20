@@ -62,11 +62,11 @@ void MagicCube(string text){
     int i = n/2;
     int j = n-1;
     
-//    1. The position of next number is calculated by decrementing row number of previous number by 1, and incrementing
-//    the column number of previous number by 1. At any time, if the calculated row position becomes -1, it will wrap around
-//     to n-1. Similarly, if the calculated column position becomes n, it will wrap around to 0.
+//     1. The position of next number is calculated by decrementing row number of previous number by 1, and incrementing
+//      the column number of previous number by 1. At any time, if the calculated row position becomes -1, it will wrap around
+//      to n-1. Similarly, if the calculated column position becomes n, it will wrap around to 0.
 //
-//    2. If the magic square already contains a number at the calculated position, calculated column
+//     2. If the magic square already contains a number at the calculated position, calculated column
 //       position will be decremented by 2, and calculated row position will be incremented by 1.
 //
 //     3. If the calculated row position is -1 & calculated column position is n, the new position would be: (0, n-2).
@@ -121,6 +121,9 @@ void MagicCube(string text){
 
 void Visionar(string text){
     string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    for(int i = 0; i < alphabet.length(); i++){
+        alphabet[i] = (char)toupper(alphabet[i]);
+    }
     string crypted;
     string key;
     int k;
@@ -134,19 +137,30 @@ void Visionar(string text){
         key=key+key[i%k];
     }
     cout << "Key is: " << key << endl;
-    
     k = key.length();
-   
+    string  str[26][26];
+    
+    
+    for(int i = 0; i < 26; i ++){
+        for(int j = 0; j < 26; j++){
+            if((j+i) >25)
+                str[i][j] = alphabet[(j+i)-26];
+            else
+                str[i][j] = alphabet[j+i];
+            cout << str[i][j] << " ";
+        }
+        cout << endl;
+    }
     
     int ind1,ind2;
+
     
     for (int i=0; i<k; i++){
         ind1=alphabet.find(text[i]);
         ind2=alphabet.find(key[i]);
-        crypted.push_back(text[(ind1 + ind2)%26]);
-        
+        crypted.push_back(alphabet[(ind1 + ind2)%26]);
     }
-    
+
     cout << crypted << endl;
     
 
@@ -200,32 +214,26 @@ void RSA(string text){
     
     // Message to be encrypted
     cout << "Message data is :" ;
-    for(int i = 0; i < len ; i++) cout << msg[i] << endl;
+    for(int i = 0; i < len ; i++) cout << msg[i] << " " ;
     cout << endl;
     // Encryption c = (msg ^ e) % n
+    
     double c[1024];
     double m[1024];
-    char original[1024];
+    
     for(int i = 0; i < len ; i++){
         c[i] = pow(msg[i], e);
+        m[i] = pow(c[i], d);
+    }
+    
+    for(int i = 0; i < len ; i++){
         c[i] = fmod(c[i], n);
+        m[i] = fmod(m[i], n);
     }
     
     cout << "Encrypted data : ";
     for(int i = 0; i < len ; i++) cout << c[i];
-    
-    cout << endl << "Original is : ";
-    
-    for(int i = 0; i < len ; i++){
-       m[i] = pow(c[i], d);
-       m[i] = fmod(m[i], n);
-       original[i] = m[i] + 65;
-       cout << original[i]  ;
-    }
     cout << endl;
-    
-    
-    
     
 }
 
